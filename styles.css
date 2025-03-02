@@ -1,5 +1,86 @@
+body {
+  max-width: 960px;
+  margin: auto;
+  margin-top: 48px;
+  background-color: #faf4ed;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
-  width: 960px;
+  margin: 0 auto;
+}
+
+.control-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; /* Adds spacing between buttons and radio options */
+  margin-bottom: 16px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+input {
+  display: none;
+}
+
+label {
+  font-family: sans-serif;
+  font-size: 16px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid #000000;
+  border-radius: 8px;
+}
+
+label:hover {
+  background: #eee;
+}
+
+input:checked + label {
+  background: #80ef80;
+}
+
+button {
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+#size-btn:hover {
+  background-color: #6aeeff;
+}
+
+#clear-btn:hover {
+  background-color: #b4637a;
+}
+
+#size-btn {
+  background: #b3ebf2;
+}
+
+#clear-btn {
+  background: #ff746c;
 }

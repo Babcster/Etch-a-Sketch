@@ -5,17 +5,43 @@ const clearButton = document.getElementById("clear-btn");
 const sizeButton = document.getElementById("size-btn");
 
 let getGridSize = 16;
+let currentMode = "black";
 
-function calcCellSize(int) {
-  let size = 960 / int;
-  return size;
+// Fix typo in createGrid and use dynamic cell size
+function createGrid() {
+  container.innerHTML = ""; // Fixed typo here
+
+  const cellSize = container.offsetWidth / getGridSize;
+
+  for (let index = 0; index < getGridSize * getGridSize; index++) {
+    const cell = document.createElement("div");
+    cell.style.boxSizing = "border-box";
+    cell.style.width = cellSize + "px";
+    cell.style.height = cellSize + "px";
+    cell.style.border = "1px solid #9893a5";
+    cell.dataset.opacityLevel = "0";
+    container.appendChild(cell);
+
+    cell.addEventListener("mouseover", () => {
+      applyColorMode(currentMode, cell);
+    });
+  }
 }
 
-let fullSize = getGridSize * getGridSize;
-let gridSize = calcCellSize(getGridSize);
-console.log(gridSize);
+// Update existing grid cells' size on window resize
+function updateGridSize() {
+  const cellSize = container.offsetWidth / getGridSize;
+  const cells = container.children;
+  for (let cell of cells) {
+    cell.style.width = cellSize + "px";
+    cell.style.height = cellSize + "px";
+  }
+}
 
-let currentMode = "black";
+// Listen for window resize and update grid
+window.addEventListener("resize", updateGridSize);
+
+// Rest of your code remains mostly the same
 radioButtons.forEach((radio) => {
   if (radio.checked) {
     currentMode = radio.value;
@@ -30,24 +56,6 @@ radioButtons.forEach((radio) => {
   });
 });
 
-function createGrid() {
-  container.inneHTML = "";
-
-  for (let index = 0; index < fullSize; index++) {
-    const cell = document.createElement("div");
-    cell.style.boxSizing = "border-box";
-    cell.style.width = gridSize + "px";
-    cell.style.height = gridSize + "px";
-    cell.style.border = "1px solid #0000FF";
-    cell.dataset.opacityLevel = "0";
-    container.appendChild(cell);
-
-    cell.addEventListener("mouseover", () => {
-      applyColorMode(currentMode, cell);
-    });
-  }
-}
-
 function applyColorMode(mode, cell) {
   switch (mode) {
     case "black":
@@ -59,7 +67,7 @@ function applyColorMode(mode, cell) {
     case "darkening":
       let currentOpacity = parseFloat(cell.dataset.opacityLevel);
       let newOpacity = Math.min(currentOpacity + 0.1, 1);
-      cell.style.background = `rgb(0, 0, 0, ${newOpacity})`;
+      cell.style.background = `rgba(0, 0, 0, ${newOpacity})`;
       cell.dataset.opacityLevel = newOpacity.toString();
       break;
     default:
@@ -86,9 +94,7 @@ function getSize() {
     size = parseInt(size);
     if (size >= 2 && size <= 100) {
       getGridSize = size;
-      gridSize = calcCellSize(getGridSize);
-      fullSize = getGridSize * getGridSize;
-      clearGrid();
+      clearGrid(); // Recreate grid with new size
     } else {
       alert("Please enter a number between 2 and 100.");
     }
@@ -98,9 +104,5 @@ function getSize() {
 }
 
 sizeButton.addEventListener("click", getSize);
-
 clearButton.addEventListener("click", clearGrid);
-
-window.onload = function () {
-  createGrid();
-};
+window.onload = createGrid;
